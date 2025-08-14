@@ -33,7 +33,6 @@ const Banner = () => {
       <div
         style={{
           width: "30px",
-          color: "blue",
           borderRight: "2px #fff solid",
           color: "transparent"
         }}

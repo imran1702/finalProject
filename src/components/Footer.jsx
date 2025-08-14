@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from './Container'
-import logo from "../assets/logo.png"
+import logo from "../assets/Logo.png"
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 
