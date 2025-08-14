@@ -77,14 +77,16 @@ const Navbar = () => {
                     <div className="relative">
                         <FaCartShopping className='cursor-pointer' ref={cartShowRef}></FaCartShopping>
                         {cartShow &&
-                        <div className="p-2 absolute right-0 w-[250px] z-10">
-                            <div className="bg-[#F5F5F3] flex items-center gap-4 p-2">
-                                <div className="">
+                        <div className="p-2 absolute right-0 w-[450px] z-10">
+                            <div className="bg-[#F5F5F3] flex items-center gap-4 p-2 justify-between">
+                                <div className="flex items-center gap-2">
+                                <div className="w-[100px]">
                                     <img src={img} alt="" />
                                 </div>
                                 <div className="">
                                     <h5>Black Smart Watch</h5>
                                     <strong>BDT 1200</strong>
+                                </div>
                                 </div>
                                 <div className="">
                                     <ImCross className='cursor-pointer'></ImCross>
