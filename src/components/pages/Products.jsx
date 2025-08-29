@@ -1,13 +1,45 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Container from '../Container'
 import { ApiData } from '../ContextApi'
 import { Link } from 'react-router-dom'
 import { FaCartShopping, FaHeart } from 'react-icons/fa6'
 import { IoIosGitCompare } from 'react-icons/io'
+import Pagination from '../Pagination'
 
 const Products = () => {
     let data = useContext(ApiData)
-    console.log(data);
+    let [perPage, setPerPage] = useState(6)
+    let [currentPage, setCurrentPage] = useState(1)
+
+    let lastPage = perPage * currentPage
+    let firstPage = lastPage - perPage
+    let allPage = data.slice(firstPage, lastPage)
+
+    let pageNumber = []
+    for(let i = 0; i < Math.ceil(data.length / perPage); i++){
+        pageNumber.push(i)
+    }
+
+    let prev = ()=>{
+        if(currentPage > 1){
+            setCurrentPage((state)=> state - 1)
+        }
+    }
+    let next = ()=>{
+        if(currentPage < pageNumber.length){
+            setCurrentPage((state)=> state + 1)
+        }
+    }
+    
+    
+    let [showCategory, setShowCategory] = useState(false)
+    let handleShowCatego = ()=>{
+        setShowCategory(!showCategory)
+    }
+
+    let handlePerPageChange = (e)=>{
+        setPerPage(e.target.value)
+    }
     
     return (
         <section className='py-5'>
@@ -21,8 +53,9 @@ const Products = () => {
                             <div className="">
                                 <div className="flex justify-between">
                                     <h5 className='font-dm font-bold text-[20px] text-[#262626]'>Shop by Category</h5>
-                                    <h5 className='font-dm font-bold text-[20px] text-[#262626] cursor-pointer'>+</h5>
+                                    <h5 className='font-dm font-bold text-[20px] text-[#262626] cursor-pointer' onClick={handleShowCatego}>+</h5>
                                 </div>
+                                {showCategory &&
                                 <ul className=''>
                                     {data.map((itemCategory)=>(
                                         <Link>
@@ -30,6 +63,7 @@ const Products = () => {
                                         </Link>
                                     ))}
                                 </ul>
+                                }
                             </div>
                         </div>
                         <div className="w-[74.5%]">
@@ -42,17 +76,15 @@ const Products = () => {
                                 </div>
                                 <div className="flex gap-2">
                                     <p>Show:</p>
-                                    <select className='border-2 border-[#767676] px-4' name="" id="">
+                                    <select onChange={handlePerPageChange} className='border-2 border-[#767676] px-4' name="" id="">
+                                        <option value="6">6</option>
+                                        <option value="9">9</option>
                                         <option value="12">12</option>
-                                        <option value="12">15</option>
-                                        <option value="12">18</option>
-                                        <option value="12">21</option>
-                                        <option value="12">24</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="flex flex-wrap justify-between">
-                                {data.map((item) => (
+                                {allPage.map((item) => (
                                     <Link to="/products">
                                         <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
                                             <div className="relative group">
@@ -82,6 +114,7 @@ const Products = () => {
                                     </Link>
                                 ))}
                             </div>
+                            <Pagination pageNumber={pageNumber} allPage={allPage} currentPage={currentPage} next={next} prev={prev}></Pagination>
                         </div>
                     </div>
                 </div>
