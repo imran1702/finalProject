@@ -156,7 +156,7 @@ const Products = ({category}) => {
                                 </>
                                 : <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
                                     {allPage.map((item) => (
-                                    <Link to={`/product/${item.id}`}>
+                                    <Link to={`/products/${item.id}`}>
                                         <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
                                             <div className="relative group">
                                                 <img src={item.thumbnail} alt="" />
