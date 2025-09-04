@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Container from './Container'
 import logo from "../assets/Logo.png"
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import { ApiData } from './ContextApi'
 
 const Footer = () => {
+  let data = useContext(ApiData)
+  let [footCategory, setFootCategory] = useState()
+
+  useEffect(()=>{
+    setFootCategory([...new Set(data.map((cateItem)=>cateItem.category))])
+  },[footCategory])
+  
   return (
     <section className='bg-[#f5f5f3] py-15'>
         <Container>
@@ -29,7 +37,6 @@ const Footer = () => {
                   <li className='text-[#6d6d6d] font-regular text-[14px]'>Category 2</li>
                   <li className='text-[#6d6d6d] font-regular text-[14px]'>Category 3</li>
                   <li className='text-[#6d6d6d] font-regular text-[14px]'>Category 4</li>
-                  <li className='text-[#6d6d6d] font-regular text-[14px]'>Category 5</li>
                 </ul>
                 <ul className='font-dm leading-[40px]'>
                   <li className='font-bold text-[#262626] text-[16px]'>HELP</li>
