@@ -8,12 +8,12 @@ import Offers from '../Offers'
 const Home = () => {
   return (
     <>
-    <Banner></Banner>
-    <Ads></Ads>
-    <NewArival></NewArival>
-    <BestSellers></BestSellers>
-    <AdsTwo></AdsTwo>
-    <Offers></Offers>
+    <Banner />
+    <Ads />
+    <NewArival />
+    <BestSellers />
+    <AdsTwo />
+    <Offers />
     </>
   )
 }

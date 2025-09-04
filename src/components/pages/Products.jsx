@@ -95,10 +95,10 @@ const Products = ({category}) => {
                             <div className="flex gap-10 justify-between my-10 items-center">
                                 <div className="flex gap-3 items-start">
                                     <div className={`${listItem == "active" ? "": "bg-[#00b3ff]" } cursor-pointer text-[30px] p-2`} onClick={()=>setListItem("")}>
-                                        <MdOutlineGridView></MdOutlineGridView>
+                                        <MdOutlineGridView />
                                     </div>
                                     <div className={`${listItem == "active" ? "bg-[#00b3ff]": "" } cursor-pointer text-[30px] p-2`} onClick={handleListItem}>
-                                        <FaListUl></FaListUl>
+                                        <FaListUl />
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
@@ -129,15 +129,15 @@ const Products = ({category}) => {
                                                 <div className="absolute bottom-4 right-0 invisible group-hover:visible">
                                                     <div className="flex items-center justify-end">
                                                         <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                                        <FaHeart></FaHeart>
+                                                        <FaHeart />
                                                     </div>
                                                     <div className="flex items-center justify-end my-3">
                                                         <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                                        <IoIosGitCompare></IoIosGitCompare>
+                                                        <IoIosGitCompare />
                                                     </div>
                                                     <div className="flex items-center justify-end">
                                                         <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                                        <FaCartShopping></FaCartShopping>
+                                                        <FaCartShopping />
                                                     </div>
                                                 </div>
                                             </div>
@@ -164,15 +164,15 @@ const Products = ({category}) => {
                                                 <div className="absolute bottom-4 right-0 invisible group-hover:visible">
                                                     <div className="flex items-center justify-end">
                                                         <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                                        <FaHeart></FaHeart>
+                                                        <FaHeart />
                                                     </div>
                                                     <div className="flex items-center justify-end my-3">
                                                         <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                                        <IoIosGitCompare></IoIosGitCompare>
+                                                        <IoIosGitCompare />
                                                     </div>
                                                     <div className="flex items-center justify-end">
                                                         <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                                        <FaCartShopping></FaCartShopping>
+                                                        <FaCartShopping />
                                                     </div>
                                                 </div>
                                             </div>

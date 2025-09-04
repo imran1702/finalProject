@@ -7,10 +7,10 @@ import Footer from './Footer'
 const RootLayout = () => {
   return (
     <>
-    <Header></Header>
-    <Navbar></Navbar>
-    <Outlet></Outlet>
-    <Footer></Footer>
+    <Header />
+    <Navbar />
+    <Outlet />
+    <Footer />
     </>
   )
 }
