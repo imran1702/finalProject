@@ -2,71 +2,97 @@ import React, { useContext, useEffect, useState } from 'react'
 import Container from '../Container'
 import { ApiData } from '../ContextApi'
 import { Link } from 'react-router-dom'
-import { FaCartShopping, FaHeart, FaListUl, FaPlus } from 'react-icons/fa6'
+import { FaCartShopping, FaHeart, FaListUl} from 'react-icons/fa6'
 import { IoIosGitCompare } from 'react-icons/io'
 import Pagination from '../Pagination'
 import { MdOutlineGridView } from 'react-icons/md'
-import { RxCross1 } from 'react-icons/rx'
 
-const Products = ({category}) => {
+const Products = () => {
     let data = useContext(ApiData)
     let [perPage, setPerPage] = useState(6)
     let [currentPage, setCurrentPage] = useState(1)
+    let [brands, setBrands] = useState([])
     let [categoryp, setCategoryp] = useState([])
     let [showFilterProducts, setShowFilterProducts] = useState([])
-    let [listItem, setListItem] = useState("")
+    let [listItem, setListItem] = useState([])
 
-    useEffect(()=>{
-        setCategoryp([...new Set(data.map((item)=>item.category))])
-    },[categoryp])
+    useEffect(() => {
+        setCategoryp([...new Set(data.map((item) => item.category))])
+        setBrands([...new Set(data.map((item) => item.brand))])
+    }, [data])
 
     let lastPage = perPage * currentPage
     let firstPage = lastPage - perPage
     let allPage = data.slice(firstPage, lastPage)
 
     let pageNumber = []
-    for(let i = 0; i < Math.ceil(data.length / perPage); i++){
+    for (let i = 0; i < Math.ceil(data.length / perPage); i++) {
         pageNumber.push(i)
     }
 
-    let prev = ()=>{
-        if(currentPage > 1){
-            setCurrentPage((state)=> state - 1)
+    let prev = () => {
+        if (currentPage > 1) {
+            setCurrentPage((state) => state - 1)
         }
     }
-    let next = ()=>{
-        if(currentPage < pageNumber.length){
-            setCurrentPage((state)=> state + 1)
+    let next = () => {
+        if (currentPage < pageNumber.length) {
+            setCurrentPage((state) => state + 1)
         }
-    }
-    
-    
-    let [showCategory, setShowCategory] = useState(false)
-    let handleShowCatego = ()=>{
-        setShowCategory(!showCategory)
     }
 
-    let handlePerPageChange = (e)=>{
+    let handlePerPageChange = (e) => {
         setPerPage(e.target.value)
     }
 
-    let handleShowCategoryProduct = (particularCategory)=>{
-        let cateFilterProducts = data.filter((item)=>item.category == particularCategory)
+    let handleShowCategoryProduct = (particularCategory) => {
+        let cateFilterProducts = data.filter((item) => item.category == particularCategory)
         setShowFilterProducts(cateFilterProducts)
+        
     }
 
-    let handleListItem = ()=>{
-        setListItem("active") 
+    let handleShowBranProduct = (particularBrandProducts) => {
+        let brandFilterProduct = data.filter((item) => item.brand == particularBrandProducts)
+        setShowFilterProducts(brandFilterProduct)
+        
+    }
+
+    let handleListItem = () => {
+        setListItem("active")
     }
 
     let [cateFilterProShow, setCateFilterProShow] = useState([])
 
-    useEffect(()=>{
-        let filterProducts = showFilterProducts.slice(0,5)
+    useEffect(() => {
+        let filterProducts = showFilterProducts.slice(0, 5)
         setCateFilterProShow(filterProducts)
-    },[showFilterProducts])
+    }, [showFilterProducts])
+
+    let [showAll, setShowAll] = useState(true)
+
+    let handleShowAll = ()=>{
+        setCateFilterProShow(showFilterProducts)
+        setShowAll(false)
+    }
+
+    let handleShowLess = ()=>{
+        let filterProducts = showFilterProducts.slice(0, 5)
+        setCateFilterProShow(filterProducts)
+        setShowAll(true)
+    }
+
+    let [low, setLow] = useState({})
+    let [high, setHigh] = useState({})
+
+    let handlePrice =(value)=>{
+        setLow(value.low);
+        setHigh(value.high);
+        setLow(value.low);
+        let priceShow = data.filter((item)=>item.price > value.low && item.price < value.high)
+        setShowFilterProducts(priceShow);
+    }
     
-    
+
     return (
         <section className='py-5'>
             <Container>
@@ -79,25 +105,44 @@ const Products = ({category}) => {
                             <div className="">
                                 <div className="flex justify-between">
                                     <h5 className='font-dm font-bold text-[20px] text-[#262626]'>Shop by Category</h5>
-                                    <h5 className='font-dm font-bold text-[20px] text-[#262626] cursor-pointer' onClick={handleShowCatego}>{showCategory == false ? <FaPlus></FaPlus> : <RxCross1></RxCross1> }</h5>
                                 </div>
-                                {showCategory &&
-                                <ul className=''>
-                                    <li onClick={()=>setShowFilterProducts("")} className='cursor-pointer'>All Product</li>
-                                    {categoryp.map((categoryItem)=>(
-                                        <li onClick={()=>handleShowCategoryProduct(categoryItem)} className='capitalize cursor-pointer'>{categoryItem}</li>
+                                <ul className='h-[200px] overflow-y-scroll'>
+                                    <li onClick={() => setShowFilterProducts([])} className='cursor-pointer'>All Product</li>
+                                    {categoryp.map((categoryItem) => (
+                                        <li onClick={() => handleShowCategoryProduct(categoryItem)} className='capitalize cursor-pointer'>{categoryItem}</li>
                                     ))}
                                 </ul>
-                                }
+                            </div>
+                            <div className="">
+                                <div className="">
+                                    <h5 className='font-dm font-bold text-[20px] text-[#262626]'>Shop by Brands</h5>
+                                </div>
+                                <ul className='h-[200px] overflow-y-scroll'>
+                                    <li className='cursor-pointer' onClick={() => setShowFilterProducts([])}>All Brands</li>
+                                    {brands.map((brandProducts) => (
+                                        <li className='cursor-pointer' onClick={() => handleShowBranProduct(brandProducts)}>{brandProducts}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="">
+                                <div className="">
+                                    <h5 className='font-dm font-bold text-[20px] text-[#262626]'>Shop by Price</h5>
+                                </div>
+                                <div className="">
+                                    <ul>
+                                        <li onClick={()=>handlePrice({low:1, high:19})}>1TK - 19TK</li>
+                                        <li onClick={()=>handlePrice({low:20, high:39})}>20TK - 39TK</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div className="w-[74.5%]">
                             <div className="flex gap-10 justify-between my-10 items-center">
                                 <div className="flex gap-3 items-start">
-                                    <div className={`${listItem == "active" ? "": "bg-[#00b3ff]" } cursor-pointer text-[30px] p-2`} onClick={()=>setListItem("")}>
+                                    <div className={`${listItem == "active" ? "" : "bg-[#00b3ff]"} cursor-pointer text-[30px] p-2`} onClick={() => setListItem("")}>
                                         <MdOutlineGridView />
                                     </div>
-                                    <div className={`${listItem == "active" ? "bg-[#00b3ff]": "" } cursor-pointer text-[30px] p-2`} onClick={handleListItem}>
+                                    <div className={`${listItem == "active" ? "bg-[#00b3ff]" : ""} cursor-pointer text-[30px] p-2`} onClick={handleListItem}>
                                         <FaListUl />
                                     </div>
                                 </div>
@@ -117,75 +162,77 @@ const Products = ({category}) => {
                                 </div>
                             </div>
                             <div className="flex flex-wrap justify-between">
-                                {cateFilterProShow.length > 0 ? 
-                                <>
-                                <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
-                                    {cateFilterProShow.map((item) => (
-                                    <Link to={`/products/${item.id}`}>
-                                        <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
-                                            <div className="relative group">
-                                                <img src={item.thumbnail} alt="" />
-                                                <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
-                                                <div className="absolute bottom-4 right-0 invisible group-hover:visible">
-                                                    <div className="flex items-center justify-end">
-                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                                        <FaHeart />
+                                {cateFilterProShow.length > 0 ?
+                                    <>
+                                        <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
+                                            {cateFilterProShow.map((item) => (
+                                                <Link to={`/products/${item.id}`}>
+                                                    <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
+                                                        <div className="relative group">
+                                                            <img src={item.thumbnail} alt="" />
+                                                            <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
+                                                            <div className="absolute bottom-4 right-0 invisible group-hover:visible">
+                                                                <div className="flex items-center justify-end">
+                                                                    <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
+                                                                    <FaHeart />
+                                                                </div>
+                                                                <div className="flex items-center justify-end my-3">
+                                                                    <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
+                                                                    <IoIosGitCompare />
+                                                                </div>
+                                                                <div className="flex items-center justify-end">
+                                                                    <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
+                                                                    <FaCartShopping />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex justify-between font-dm">
+                                                            <h3 className='text-[10px]'>{item.title}</h3>
+                                                            <strong>{item.price}BDT</strong>
+                                                        </div>
+                                                        <span>{item.brand}</span>
                                                     </div>
-                                                    <div className="flex items-center justify-end my-3">
-                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                                        <IoIosGitCompare />
-                                                    </div>
-                                                    <div className="flex items-center justify-end">
-                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                                        <FaCartShopping />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-between font-dm">
-                                                <h3 className='text-[10px]'>{item.title}</h3>
-                                                <strong>{item.price}BDT</strong>
-                                            </div>
-                                            <span>{item.brand}</span>
+                                                </Link>
+                                            ))}
                                         </div>
-                                    </Link>
-                                ))}
-                                </div> 
-                                <div className="" onClick={()=>setCateFilterProShow("")}>
-                                    <h1>Show All</h1>
-                                </div>
-                                </>
-                                : <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
-                                    {allPage.map((item) => (
-                                    <Link to={`/products/${item.id}`}>
-                                        <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
-                                            <div className="relative group">
-                                                <img src={item.thumbnail} alt="" />
-                                                <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
-                                                <div className="absolute bottom-4 right-0 invisible group-hover:visible">
-                                                    <div className="flex items-center justify-end">
-                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                                        <FaHeart />
+                                        {showFilterProducts.length > 5 && showAll ?
+                                            <h1 className='cursor-pointer' onClick={handleShowAll}>Show All</h1>
+                                            :showFilterProducts.length > 5 &&
+                                            <h1 className='cursor-pointer' onClick={handleShowLess}>Show Less</h1>
+                                        }
+                                    </>
+                                    : <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
+                                        {allPage.map((item) => (
+                                            <Link to={`/products/${item.id}`}>
+                                                <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
+                                                    <div className="relative group">
+                                                        <img src={item.thumbnail} alt="" />
+                                                        <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
+                                                        <div className="absolute bottom-4 right-0 invisible group-hover:visible">
+                                                            <div className="flex items-center justify-end">
+                                                                <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
+                                                                <FaHeart />
+                                                            </div>
+                                                            <div className="flex items-center justify-end my-3">
+                                                                <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
+                                                                <IoIosGitCompare />
+                                                            </div>
+                                                            <div className="flex items-center justify-end">
+                                                                <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
+                                                                <FaCartShopping />
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex items-center justify-end my-3">
-                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                                        <IoIosGitCompare />
+                                                    <div className="flex justify-between font-dm">
+                                                        <h3 className='text-[10px]'>{item.title}</h3>
+                                                        <strong>{item.price}BDT</strong>
                                                     </div>
-                                                    <div className="flex items-center justify-end">
-                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                                        <FaCartShopping />
-                                                    </div>
+                                                    <span>{item.brand}</span>
                                                 </div>
-                                            </div>
-                                            <div className="flex justify-between font-dm">
-                                                <h3 className='text-[10px]'>{item.title}</h3>
-                                                <strong>{item.price}BDT</strong>
-                                            </div>
-                                            <span>{item.brand}</span>
-                                        </div>
-                                    </Link>
-                                ))}
-                                <Pagination pageNumber={pageNumber} allPage={allPage} currentPage={currentPage} next={next} prev={prev}></Pagination>
-                                </div>
+                                            </Link>
+                                        ))}
+                                        <Pagination pageNumber={pageNumber} allPage={allPage} currentPage={currentPage} next={next} prev={prev}></Pagination>
+                                    </div>
                                 }
                             </div>
                         </div>

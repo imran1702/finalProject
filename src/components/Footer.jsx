@@ -7,11 +7,11 @@ import { ApiData } from './ContextApi'
 
 const Footer = () => {
   let data = useContext(ApiData)
-  let [footCategory, setFootCategory] = useState()
+  let [footCaegory, setFootCategory] = useState()
 
   useEffect(()=>{
     setFootCategory([...new Set(data.map((cateItem)=>cateItem.category))])
-  },[footCategory])
+  },[data])
   
   return (
     <section className='bg-[#f5f5f3] py-15'>

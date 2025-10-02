@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
 import Container from '../Container'
-import { FaCartShopping, FaHeart } from 'react-icons/fa6'
-import { IoIosGitCompare } from 'react-icons/io'
+import { useDispatch } from 'react-redux';
+import { addCart } from '../slices/productSlice';
 
 const ProductDetails = () => {
   let productId = useParams()
@@ -17,13 +18,35 @@ const ProductDetails = () => {
   useEffect(() => {
     getProductId()
   }, [])
-  console.log(singleProduct);
+
+  let navigate = useNavigate()
+  let dispatch = useDispatch()
+
+  let handleCart = (singleProduct) => {
+    dispatch(addCart({...singleProduct, qun: 1}))
+    toast("Add to Cart Successfully Done");
+    setTimeout(() => {
+      navigate("/cart")
+    }, 2000)
+  }
 
 
   return (
     <section className='py-5'>
       <Container>
         <div className="">
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
           <div className="flex">
             <div className="">
               <img src={singleProduct.thumbnail} alt="" />
@@ -46,9 +69,38 @@ const ProductDetails = () => {
                 <p className='capitalize font-dm'><strong>warranty: </strong>{singleProduct.warrantyInformation}</p>
               </div>
               <div className="flex gap-4">
-                <button className='bg-[#606afb] py-2 px-4 rounded-2xl cursor-pointer'>Buy Now</button>
-                <button className='bg-[#606afb] py-2 px-4 rounded-2xl cursor-pointer'>Add Cart</button>
+                <button>-</button>
+                <p>1</p>
+                <button>+</button>
               </div>
+              <div className="flex gap-4">
+                <button className='bg-[#606afb] py-2 px-4 rounded-2xl cursor-pointer'>Buy Now</button>
+                <button onClick={()=>handleCart(singleProduct)} className='bg-[#606afb] py-2 px-4 rounded-2xl cursor-pointer'>Add Cart</button>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="">
+              <ul className='flex gap-5'>
+                <li className='bg-[#baf9eb] p-2 rounded-2xl'>
+                  <button>Specification</button>
+                </li>
+                <li className='bg-[#baf9eb] p-2 rounded-2xl'>
+                  <button>Description</button>
+                </li>
+                <li className='bg-[#baf9eb] p-2 rounded-2xl'>
+                  <button>Review</button>
+                </li>
+              </ul>
+            </div>
+            <div className="">
+              <h5>Description</h5>
+              <p>{singleProduct.description}</p>
+            </div>
+            <div className="">
+              <h5>Review</h5>
+              <p>Get specific details about this product from customers who own it.</p>
+              <p>{singleProduct.rating}</p>
             </div>
           </div>
         </div>
