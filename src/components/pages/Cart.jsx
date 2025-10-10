@@ -5,7 +5,7 @@ import { decrement, increment, productRemove } from '../slices/productSlice'
 import { Link } from 'react-router-dom'
 import cart from "../../assets/Adobe Express - file (2).png"
 
-const Cart = ({ totalPrice }) => {
+const Cart = () => {
   let data = useSelector((state) => state.product.cartItem)
   let dispatch = useDispatch()
   let { totalPrice, totalQuantity } = data.reduce((acc, item) => {

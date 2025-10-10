@@ -8,7 +8,7 @@ import { ImCross } from 'react-icons/im'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const Navbar = ({ totalPrice }) => {
+const Navbar = () => {
     let data = useSelector((state) => state.product.cartItem)
     let [category, setCategory] = useState(false)
     let [account, setAccount] = useState(false)
@@ -104,7 +104,7 @@ const Navbar = ({ totalPrice }) => {
                                                 </div>
                                             ))}
                                             <div className="bg-[#fff] p-2">
-                                                <span>Subtotal:<strong>BDT {totalPrice}</strong></span>
+                                                <span>Subtotal:<strong>BDT</strong></span>
                                                 <div className="justify-around flex">
                                                     <Link to="/cart">
                                                         <button className='border-1 border[#000] py-[4px] px-[14px] cursor-pointer'>View Cart</button>
