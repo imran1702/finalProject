@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import Container from '../Container'
 import { ApiData } from '../ContextApi'
 import { Link } from 'react-router-dom'
-import { FaCartShopping, FaHeart, FaListUl} from 'react-icons/fa6'
+import { FaCartShopping, FaHeart, FaListUl } from 'react-icons/fa6'
 import { IoIosGitCompare } from 'react-icons/io'
 import Pagination from '../Pagination'
 import { MdOutlineGridView } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
+import { addCart } from '../slices/productSlice'
 
 const Products = () => {
     let data = useContext(ApiData)
@@ -15,6 +17,7 @@ const Products = () => {
     let [categoryp, setCategoryp] = useState([])
     let [showFilterProducts, setShowFilterProducts] = useState([])
     let [listItem, setListItem] = useState([])
+    let dispatch = useDispatch()
 
     useEffect(() => {
         setCategoryp([...new Set(data.map((item) => item.category))])
@@ -48,13 +51,13 @@ const Products = () => {
     let handleShowCategoryProduct = (particularCategory) => {
         let cateFilterProducts = data.filter((item) => item.category == particularCategory)
         setShowFilterProducts(cateFilterProducts)
-        
+
     }
 
     let handleShowBranProduct = (particularBrandProducts) => {
         let brandFilterProduct = data.filter((item) => item.brand == particularBrandProducts)
         setShowFilterProducts(brandFilterProduct)
-        
+
     }
 
     let handleListItem = () => {
@@ -70,12 +73,12 @@ const Products = () => {
 
     let [showAll, setShowAll] = useState(true)
 
-    let handleShowAll = ()=>{
+    let handleShowAll = () => {
         setCateFilterProShow(showFilterProducts)
         setShowAll(false)
     }
 
-    let handleShowLess = ()=>{
+    let handleShowLess = () => {
         let filterProducts = showFilterProducts.slice(0, 5)
         setCateFilterProShow(filterProducts)
         setShowAll(true)
@@ -84,14 +87,13 @@ const Products = () => {
     let [low, setLow] = useState({})
     let [high, setHigh] = useState({})
 
-    let handlePrice =(value)=>{
+    let handlePrice = (value) => {
         setLow(value.low);
         setHigh(value.high);
         setLow(value.low);
-        let priceShow = data.filter((item)=>item.price > value.low && item.price < value.high)
+        let priceShow = data.filter((item) => item.price > value.low && item.price < value.high)
         setShowFilterProducts(priceShow);
     }
-    
 
     return (
         <section className='py-5'>
@@ -130,8 +132,8 @@ const Products = () => {
                                 </div>
                                 <div className="">
                                     <ul>
-                                        <li onClick={()=>handlePrice({low:1, high:19})}>1TK - 19TK</li>
-                                        <li onClick={()=>handlePrice({low:20, high:39})}>20TK - 39TK</li>
+                                        <li onClick={() => handlePrice({ low: 1, high: 19 })}>1TK - 19TK</li>
+                                        <li onClick={() => handlePrice({ low: 20, high: 39 })}>20TK - 39TK</li>
                                     </ul>
                                 </div>
                             </div>
@@ -166,25 +168,53 @@ const Products = () => {
                                     <>
                                         <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
                                             {cateFilterProShow.map((item) => (
+                                                <div className="relative group">
+                                                    <Link to={`/products/${item.id}`}>
+                                                        <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
+                                                            <div className="">
+                                                                <img src={item.thumbnail} alt="" />
+                                                                <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
+                                                            </div>
+                                                            <div className="flex justify-between font-dm">
+                                                                <h3 className='text-[10px]'>{item.title}</h3>
+                                                                <strong>{item.price}BDT</strong>
+                                                            </div>
+                                                            <span>{item.brand}</span>
+                                                        </div>
+                                                    </Link>
+                                                    <div className="absolute bottom-18 right-5 invisible group-hover:visible">
+                                                        <div className="flex items-center justify-end">
+                                                            <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
+                                                            <FaHeart />
+                                                        </div>
+                                                        <div className="flex items-center justify-end my-3">
+                                                            <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
+                                                            <IoIosGitCompare />
+                                                        </div>
+                                                        <div onClick={() => dispatch(addCart({ ...item, qun: 1 }))} className="flex items-center justify-end">
+                                                            <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
+                                                            <FaCartShopping />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {showFilterProducts.length > 5 && showAll ?
+                                            <h1 className='cursor-pointer' onClick={handleShowAll}>Show All</h1>
+                                            : showFilterProducts.length > 5 &&
+                                            <h1 className='cursor-pointer' onClick={handleShowLess}>Show Less</h1>
+                                        }
+                                    </>
+                                    : <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
+                                        {allPage.map((item) => (
+                                            <div className="relative group">
+
                                                 <Link to={`/products/${item.id}`}>
                                                     <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
-                                                        <div className="relative group">
+                                                        <div className="">
                                                             <img src={item.thumbnail} alt="" />
                                                             <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
-                                                            <div className="absolute bottom-4 right-0 invisible group-hover:visible">
-                                                                <div className="flex items-center justify-end">
-                                                                    <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                                                    <FaHeart />
-                                                                </div>
-                                                                <div className="flex items-center justify-end my-3">
-                                                                    <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                                                    <IoIosGitCompare />
-                                                                </div>
-                                                                <div className="flex items-center justify-end">
-                                                                    <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                                                    <FaCartShopping />
-                                                                </div>
-                                                            </div>
+
                                                         </div>
                                                         <div className="flex justify-between font-dm">
                                                             <h3 className='text-[10px]'>{item.title}</h3>
@@ -193,43 +223,21 @@ const Products = () => {
                                                         <span>{item.brand}</span>
                                                     </div>
                                                 </Link>
-                                            ))}
-                                        </div>
-                                        {showFilterProducts.length > 5 && showAll ?
-                                            <h1 className='cursor-pointer' onClick={handleShowAll}>Show All</h1>
-                                            :showFilterProducts.length > 5 &&
-                                            <h1 className='cursor-pointer' onClick={handleShowLess}>Show Less</h1>
-                                        }
-                                    </>
-                                    : <div className={`${listItem == "active" ? "w-full" : "flex flex-wrap gap-5"}`}>
-                                        {allPage.map((item) => (
-                                            <Link to={`/products/${item.id}`}>
-                                                <div className="shadow-[0px_10px_20px_0px_rgba(0,_0,_0,_0.15)] px-3 my-3">
-                                                    <div className="relative group">
-                                                        <img src={item.thumbnail} alt="" />
-                                                        <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
-                                                        <div className="absolute bottom-4 right-0 invisible group-hover:visible">
-                                                            <div className="flex items-center justify-end">
-                                                                <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                                                <FaHeart />
-                                                            </div>
-                                                            <div className="flex items-center justify-end my-3">
-                                                                <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                                                <IoIosGitCompare />
-                                                            </div>
-                                                            <div className="flex items-center justify-end">
-                                                                <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                                                <FaCartShopping />
-                                                            </div>
-                                                        </div>
+                                                <div className="absolute bottom-18 right-5 invisible group-hover:visible">
+                                                    <div className="flex items-center justify-end">
+                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
+                                                        <FaHeart />
                                                     </div>
-                                                    <div className="flex justify-between font-dm">
-                                                        <h3 className='text-[10px]'>{item.title}</h3>
-                                                        <strong>{item.price}BDT</strong>
+                                                    <div className="flex items-center justify-end my-3">
+                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
+                                                        <IoIosGitCompare />
                                                     </div>
-                                                    <span>{item.brand}</span>
+                                                    <div onClick={() => dispatch(addCart({ ...item, qun: 1 }))} className="flex items-center justify-end">
+                                                        <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
+                                                        <FaCartShopping />
+                                                    </div>
                                                 </div>
-                                            </Link>
+                                            </div>
                                         ))}
                                         <Pagination pageNumber={pageNumber} allPage={allPage} currentPage={currentPage} next={next} prev={prev}></Pagination>
                                     </div>
