@@ -21,8 +21,12 @@ const Header = () => {
                         <Link to="/products">
                             <li className='font-dm'>Shop</li>
                         </Link>
+                        <Link to="/about">
                         <li className='font-dm'>About</li>
+                        </Link>
+                        <Link to="/contact">
                         <li className='font-dm'>Contact</li>
+                        </Link>
                         <li className='font-dm'>Journal</li>
                     </ul>
                 </div>

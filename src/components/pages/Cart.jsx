@@ -2,18 +2,23 @@ import React from 'react'
 import Container from '../Container'
 import { useDispatch, useSelector } from 'react-redux'
 import { decrement, increment, productRemove } from '../slices/productSlice'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import cart from "../../assets/Adobe Express - file (2).png"
 
 const Cart = () => {
   let data = useSelector((state) => state.product.cartItem)
   let dispatch = useDispatch()
+  let navigate = useNavigate()
   let { totalPrice, totalQuantity } = data.reduce((acc, item) => {
     acc.totalPrice += item.price * item.qun
     acc.totalQuantity += item.qun
     return acc;
   }, { totalPrice: 0, totalQuantity: 0 })
   let discount = totalPrice * 5 / 100
+
+  let handleCheckOut = ()=>{
+    navigate("/checkout")
+  }
 
   return (
     <section>
@@ -69,21 +74,24 @@ const Cart = () => {
                     </div>
                   </div>
                 ))}
+                <div className="">
                 <div className="justify-end flex">
                   <table>
                     <tr>
-                      <td>Sub-Total :</td>
-                      <td>{totalPrice.toFixed(2)} TK</td>
+                      <td className='pe-15'>Sub-Total</td>
+                      <td>: {totalPrice.toFixed(2)} TK</td>
+                    </tr>
+                    <tr className='py-3'>
+                      <td className=''>Less Discount</td>
+                      <td>: {discount.toFixed(2)} TK</td>
                     </tr>
                     <tr>
-                      <td>Less Discount:</td>
-                      <td>{discount.toFixed(2)} TK</td>
-                    </tr>
-                    <tr>
-                      <td>total:</td>
-                      <td>{(totalPrice - discount).toFixed(2)} TK</td>
+                      <td>total</td>
+                      <td>: {(totalPrice - discount).toFixed(2)} TK</td>
                     </tr>
                   </table>
+                </div>
+                  <button onClick={handleCheckOut} className='justify-end flex'>Proccess CheakOut</button>
                 </div>
               </>
               :

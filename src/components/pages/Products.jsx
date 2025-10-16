@@ -214,7 +214,6 @@ const Products = () => {
                                                         <div className="">
                                                             <img src={item.thumbnail} alt="" />
                                                             <span className='absolute top-5 -rotate-45 text-[#ff0000]'>{item.availabilityStatus}</span>
-
                                                         </div>
                                                         <div className="flex justify-between font-dm">
                                                             <h3 className='text-[10px]'>{item.title}</h3>

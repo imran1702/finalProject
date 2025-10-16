@@ -5,6 +5,9 @@ import Products from "./components/pages/Products"
 import ErorPage from "./components/pages/ErorPage"
 import ProductDetails from "./components/pages/ProductDetails"
 import Cart from "./components/pages/Cart"
+import CheckOut from "./components/pages/CheckOut"
+import About from "./components/pages/About"
+import Contact from "./components/pages/Contact"
 let router = createBrowserRouter(createRoutesFromElements(
   <>
   <Route element={<RootLayout />}>
@@ -12,6 +15,9 @@ let router = createBrowserRouter(createRoutesFromElements(
     <Route path="/products" element={<Products />}></Route>
     <Route path="/products/:id" element={<ProductDetails />}></Route>
     <Route path="/cart" element={<Cart />}></Route>
+    <Route path="/checkout" element={<CheckOut />}></Route>
+    <Route path="/about" element={<About />}></Route>
+    <Route path="/contact" element={<Contact />}></Route>
   </Route>
     <Route path="*" element={<ErorPage />}></Route>
   </>

@@ -6,10 +6,13 @@ import { FaAngleLeft, FaAngleRight, FaCartShopping, FaHeart } from 'react-icons/
 import { IoIosGitCompare } from 'react-icons/io';
 import { ApiData } from './ContextApi';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addCart } from './slices/productSlice';
 
 const NewArival = () => {
 
     let data = useContext(ApiData)
+    let dispatch = useDispatch()
     
 
     function SampleNextArrow(props) {
@@ -19,7 +22,7 @@ const NewArival = () => {
       className="absolute top-[50%] right-5 translate-y-[-50%] bg-[#c4c0c0] p-5 rounded-full cursor-pointer"
       onClick={onClick}
     >
-        <FaAngleRight></FaAngleRight>
+        <FaAngleRight />
     </div>
   );
 }
@@ -31,7 +34,7 @@ function SamplePrevArrow(props) {
       className="absolute top-[50%] left-5 translate-y-[-50%] bg-[#c4c0c0] p-5 rounded-full cursor-pointer z-[1]"
       onClick={onClick}
     >
-        <FaAngleLeft></FaAngleLeft>
+        <FaAngleLeft />
     </div>
   );
 }
@@ -63,15 +66,15 @@ function SamplePrevArrow(props) {
                                     <div className="absolute bottom-4 right-0 invisible group-hover:visible">
                                         <div className="flex items-center justify-end">
                                             <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Wish List</p>
-                                            <FaHeart></FaHeart>
+                                            <FaHeart />
                                         </div>
                                         <div className="flex items-center justify-end my-3">
                                             <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Compare</p>
-                                            <IoIosGitCompare></IoIosGitCompare>
+                                            <IoIosGitCompare />
                                         </div>
-                                        <div className="flex items-center justify-end">
+                                        <div onClick={()=>dispatch(addCart({...item, qun: 1}))} className="flex items-center justify-end">
                                             <p className='me-3 font-dm text-[16px] text-[#767676] hover:text-[#262626] cursor-pointer'>Add to Cart</p>
-                                            <FaCartShopping></FaCartShopping>
+                                            <FaCartShopping />
                                         </div>
                                     </div>
                                 </div>
